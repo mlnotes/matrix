@@ -17,6 +17,7 @@ public:
 	float module() const;
 	
 	float& operator[](const uint &index) const;
+	mvector& operator= (const mvector &);
 	friend mvector operator+(const mvector &, const mvector &);
 	friend mvector operator-(const mvector &, const mvector &);
 	friend float operator* (const mvector &, const mvector &);
@@ -26,6 +27,8 @@ public:
 private:
 	uint _size;
 	float* _data;
+	
+	void copy(const mvector &);
 };
 
 #endif

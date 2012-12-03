@@ -17,10 +17,7 @@ mvector(const float *array, uint size){
 
 mvector::
 mvector(const mvector &that){
-	this->_size = that._size;
-	this->_data = new float[this->_size];
-	for(uint i = 0; i < this->_size; ++i)
-		this->_data[i] = that._data[i];
+	copy(that);
 }
 
 mvector::
@@ -45,6 +42,20 @@ module() const{
 float& mvector::
 operator[] (const uint &index) const{
 	return this->_data[index];
+}
+
+mvector& mvector::
+operator= (const mvector &that){
+	copy(that);
+	return *this;
+}
+
+void mvector::
+copy(const mvector &that){
+	this->_size = that._size;
+	this->_data = new float[this->_size];
+	for(uint i = 0; i < this->_size; ++i)
+		this->_data[i] = that._data[i];
 }
 
 mvector

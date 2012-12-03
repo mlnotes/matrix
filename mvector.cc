@@ -23,61 +23,18 @@ mvector(const mvector &that){
 		this->_data[i] = that._data[i];
 }
 
-mvector& mvector::
-operator= (const mvector &that){
-	this->_size = that._size;
-	this->_data = new float[this->_size];
-	for(uint i = 0; i < this->_size; ++i)
-		this->_data[i] = that._data[i];
-
-	return *(this);
-}
-
-uint mvector::
-size(){
-	return this->_size;
-}
-
 mvector::
 ~mvector(){
 	delete [] this->_data;
 }
 
-float& mvector::
-operator[] (const uint &index){
-	return this->_data[index];
-}
-
-mvector mvector::
-operator+ (const mvector &that){
-	mvector v(this->_size);
-	for(uint i = 0; i < this->_size; ++i)
-		v[i] = this->_data[i] + that._data[i];
-	
-	return v;
-}
-
-mvector mvector::
-operator- (const mvector &that){
-	mvector v(this->_size);
-	for(uint i = 0; i < this->_size; ++i)
-		v[i] = this->_data[i] - that._data[i];
-	
-	return v;
+uint mvector::
+size() const{
+	return this->_size;
 }
 
 float mvector::
-operator* (const mvector &that){
-	float result = 0.0;
-	for(uint i = 0; i < this->_size; ++i)
-		result += this->_data[i] * that._data[i];
-	
-	return result;
-}
-
-
-float mvector::
-module(){
+module() const{
 	float total = 0.0;
 	for(uint i = 0; i < this->_size; ++i)
 		total += this->_data[i] * this->_data[i];
@@ -85,3 +42,57 @@ module(){
 	return sqrt(total);
 }
 
+float& mvector::
+operator[] (const uint &index) const{
+	return this->_data[index];
+}
+
+mvector
+operator+ (const mvector &left, const mvector &right){
+	mvector v(left.size());
+	for(uint i = 0; i < v.size(); ++i)
+		v[i] = left[i] + right[i];	
+	return v;
+}
+
+mvector
+operator- (const mvector &left, const mvector &right){
+	mvector v(left.size());
+	for(uint i = 0; i < v.size(); ++i)
+		v[i] = left[i] - right[i];	
+	return v;
+}
+
+float
+operator* (const mvector &left, const mvector &right){
+	float result = 0.0;
+	for(uint i = 0; i < left.size(); ++i)
+		result += left[i] * right[i];
+	
+	return result;
+}
+
+ostream&
+operator<< (ostream &out, mvector &obj){
+	out << '[';
+	for(uint i = 0; i < obj.size()-1; ++i)
+		out << obj[i] << ',';
+	if(obj.size() > 0)
+		out << obj[obj.size()-1];
+
+	out << ']';
+	return out;
+}
+
+float
+cos(const mvector &left, const mvector &right){
+	if(left.size() == 0 || right.size() == 0)
+		return 0;
+
+	float lm = left.module();
+	float rm = right.module();
+	if(lm == 0 || rm == 0)
+		return 0;
+
+	return (left * right)/(lm * rm);
+}

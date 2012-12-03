@@ -1,6 +1,9 @@
 #ifndef MVECTOR_H
 #define MVECTOR_H
 
+#include <ostream>
+using std::ostream;
+
 typedef unsigned int uint;
 
 class mvector{
@@ -10,14 +13,16 @@ public:
 	mvector(const mvector &);
 	~mvector();
 
-	uint size();
-	float& operator[](const uint &index);
-	mvector& operator=(const mvector &);
-	mvector operator+(const mvector &);
-	mvector operator-(const mvector &);
-	float operator* (const mvector &);
+	uint size() const;
+	float module() const;
+	
+	float& operator[](const uint &index) const;
+	friend mvector operator+(const mvector &, const mvector &);
+	friend mvector operator-(const mvector &, const mvector &);
+	friend float operator* (const mvector &, const mvector &);
+	friend ostream& operator<< (ostream &, mvector &);
+	friend float cos(const mvector &, const mvector &);
 
-	float module();
 private:
 	uint _size;
 	float* _data;

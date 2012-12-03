@@ -3,19 +3,19 @@
 
 
 int main(){
-    matrix m(12, 13);
-	uint rows = m.get_rows_num();
-	uint cols = m.get_cols_num();
+	mvector m1(2);
+	m1[0] = 1.0;
+	m1[1] = 0.0;
 
-	std::cout << rows << ' ' << cols << '\n';
+	mvector m2 = m1;
+	m2[1] = 1;
 
-	mvector& v = m[2];
-	v[8] = 12.99;
-	m[2][8] = 13;
-	std::cout << v.size() << ' ' 
-				<< v[8] << ' ' 
-				<< m[2][8] << '\n';
+	mvector m = m1 +  m2;
+	mvector mm = m1 - m2;
 
-	mvector col = m.get_col(8);
-	std::cout << col[2] << '\n';
+	std::cout << m1 << '\n';
+	std::cout << m2 << '\n';
+	std::cout << m << '\n';
+	std::cout << mm << '\n';
+	std::cout << cos(m1,m2) << '\n';
 }

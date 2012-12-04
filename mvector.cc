@@ -60,6 +60,8 @@ copy(const mvector &that){
 
 mvector
 operator+ (const mvector &left, const mvector &right){
+	if(left.size() != right.size())
+		throw "size not equal";
 	mvector v(left.size());
 	for(uint i = 0; i < v.size(); ++i)
 		v[i] = left[i] + right[i];	
@@ -68,6 +70,8 @@ operator+ (const mvector &left, const mvector &right){
 
 mvector
 operator- (const mvector &left, const mvector &right){
+	if(left.size() != right.size())
+		throw "size not equal";
 	mvector v(left.size());
 	for(uint i = 0; i < v.size(); ++i)
 		v[i] = left[i] - right[i];	
@@ -76,10 +80,21 @@ operator- (const mvector &left, const mvector &right){
 
 float
 operator* (const mvector &left, const mvector &right){
+	if(left.size() != right.size())
+		throw "size not equal";
 	float result = 0.0;
 	for(uint i = 0; i < left.size(); ++i)
 		result += left[i] * right[i];
 	
+	return result;
+}
+
+mvector
+operator* (const float &k, const mvector &m){
+	mvector result(m.size());
+	for(uint i = 0; i < m.size(); ++i)
+		result[i] = m[i] * k;
+
 	return result;
 }
 

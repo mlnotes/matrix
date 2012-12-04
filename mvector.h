@@ -21,6 +21,7 @@ public:
 	friend mvector operator+(const mvector &, const mvector &);
 	friend mvector operator-(const mvector &, const mvector &);
 	friend float operator* (const mvector &, const mvector &);
+	friend mvector operator* (const float &, const mvector &);
 	friend ostream& operator<< (ostream &, mvector &);
 	friend float cos(const mvector &, const mvector &);
 

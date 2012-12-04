@@ -18,6 +18,14 @@ public:
 	matrix& operator= (const matrix &that);
 	friend ostream& operator<< (ostream &, const matrix &obj);
 	friend matrix operator* (const matrix &, const matrix &);
+	friend matrix operator* (const float &, const matrix &);
+	friend matrix operator+ (const matrix &, const matrix &);
+	friend matrix operator- (const matrix &, const matrix &);
+
+	matrix minor(uint, uint) const;
+	matrix transpose() const;
+	matrix inverse() const;
+	float det() const;
 private:
 	uint _rows;
 	uint _cols;

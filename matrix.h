@@ -9,6 +9,7 @@ public:
 	matrix(const matrix &);
 	~matrix();
 
+	void reset(uint, uint);
 	uint row_count() const;
 	uint col_count() const;
 	mvector get_row(uint index) const;
@@ -22,7 +23,8 @@ public:
 	friend matrix operator+ (const matrix &, const matrix &);
 	friend matrix operator- (const matrix &, const matrix &);
 
-	matrix minor(uint, uint) const;
+	matrix mminor(uint, uint) const;
+	matrix mminor(uint, uint, uint, uint, matrix &) const;
 	matrix transpose() const;
 	matrix inverse() const;
 	float det() const;

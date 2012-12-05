@@ -21,6 +21,21 @@ matrix::
     delete [] this->_data;
 }
 
+void matrix::
+reset(uint rows, uint cols){
+	if(this->_data){
+		delete [] this->_data;
+		this->_data = NULL;
+	}
+
+    this->_rows = rows;
+    this->_cols = cols;
+    this->_data = new mvector[rows];
+    for(uint i = 0; i < rows; ++i){
+        this->_data[i] = mvector(cols);
+	}
+}
+
 matrix& matrix::
 operator= (const matrix &that){
 	copy(that);
@@ -152,7 +167,7 @@ inverse() const{
 }
 
 matrix matrix::
-minor(uint m, uint n) const{
+mminor(uint m, uint n) const{
 	matrix result(this->row_count()-1,
 				this->col_count()-1);
 
@@ -171,6 +186,41 @@ minor(uint m, uint n) const{
 	return result;
 }
 
+matrix matrix::
+mminor(uint rstart, uint rend, uint cstart, uint cend, matrix &sub) const{
+	if(rstart < 0 || rend > this->row_count()-1 || rend < rstart)
+		throw "invalid row range";
+	if(cstart < 0 || cend > this->col_count()-1 || cend < cstart)
+		throw "invalid col range";
+
+	sub.reset(rend-rstart+1, cend-cstart+1);
+	matrix result(this->row_count()-sub.row_count(),
+					this->col_count()-sub.col_count());
+
+	uint mi = 0, mj = 0;
+	uint si = 0, sj = 0;
+	for(uint i = 0; i < this->row_count(); ++i){
+		if(i >= rstart && i <= rend){
+			sj = 0;
+			for(uint j = cstart; j <= cend; ++j){
+				sub[si][sj] = this->_data[i][j];
+				sj += 1;
+			}
+			si += 1;
+		}else{
+			mj = 0;
+			for(uint j = 0; j < this->col_count(); ++j){
+				if(j < cstart || j > cend){
+					result[mi][mj] = this->_data[i][j];
+					mj += 1;
+				}
+			}
+			mi += 1;
+		}
+	}
+	return result;
+}
+
 float matrix::
 det() const{	//TODO there should be some optimizing methods
 	if(this->row_count() != this->col_count())
@@ -182,16 +232,23 @@ det() const{	//TODO there should be some optimizing methods
 	else if(n == 2)
 		return this->_data[0][0] * this->_data[1][1] -
 				this->_data[0][1] * this->_data[1][0];
+	else if(n == 3)
+		return this->_data[0][0] * this->_data[1][1] * this->_data[2][2] +
+				this->_data[1][0] * this->_data[2][1] * this->_data[0][2] +
+				this->_data[2][0] * this->_data[0][1] * this->_data[1][2] -
+				this->_data[2][0] * this->_data[1][1] * this->_data[0][2] -
+				this->_data[1][0] * this->_data[0][1] * this->_data[2][2] -
+				this->_data[0][0] * this->_data[2][1] * this->_data[1][2];
 
 	float result = 0.0;
 	// applying Laplace expansion on row 0
 	for(uint i = 0; i < n; ++i){
-		float minor_det = this->_data[0][i] * this->minor(0, i).det();
-//		std::cout << "minor: " << n << ' ' << i << ' ' << minor_det << '\n';
+		if(this->_data[0][i] == 0) continue;
+		float mminor_det = this->_data[0][i] * this->mminor(0, i).det();
 		if(i % 2)
-			result -= minor_det;
+			result -= mminor_det;
 		else
-			result += minor_det;
+			result += mminor_det;
 	}
 	return result;
 }

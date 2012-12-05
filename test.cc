@@ -1,6 +1,6 @@
 #include <iostream>
-#include "matrix.h"
 #include <stdlib.h>
+#include "matrix.h"
 #include <time.h>
 
 void mvector_test(){
@@ -45,7 +45,23 @@ void matrix_test(){
 }
 
 void matrix_det(){
-	uint n = 3;
+	uint n = 7;
+	matrix m(n, n);
+	for(uint i = 0; i < n; ++i){
+		for(uint j = 0; j < n; ++j){
+			m[i][j] = (rand() % 10);
+		}
+	}
+	std::cout << m << '\n';
+
+
+	uint start = clock();
+	std::cout << m.det() << '\n';
+	std::cout << clock()-start <<'\n';
+}
+
+void matrix_mminor(){
+	uint n = 9;
 	matrix m(n, n);
 	for(uint i = 0; i < n; ++i){
 		for(uint j = 0; j < n; ++j){
@@ -54,13 +70,19 @@ void matrix_det(){
 	}
 	std::cout << m << '\n';
 
-//	matrix mm = m.minor(0, 1);
-//	std::cout << mm << '\n';
-	std::cout << m.det() << '\n';
+	matrix sub;
+	std::cout << "sub declared\n";
+
+	matrix mm = m.mminor(0,4, 0, 4, sub);
+	std::cout << sub << '\n';
+	std::cout << mm << '\n';
+
 }
 
 int main(){
 	srand(time(0));
 //	matrix_test();
+
 	matrix_det();
+//	matrix_mminor();
 }

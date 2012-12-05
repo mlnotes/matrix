@@ -1,5 +1,5 @@
 CC = g++
-CCFLAGES = -Wall 
+CCFLAGES = -Wall -g
 
 all: test
 

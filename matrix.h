@@ -28,6 +28,7 @@ public:
 	matrix transpose() const;
 	matrix inverse() const;
 	float det() const;
+	matrix cofactor() const;
 private:
 	uint _rows;
 	uint _cols;

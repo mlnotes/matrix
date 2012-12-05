@@ -45,19 +45,34 @@ void matrix_test(){
 }
 
 void matrix_det(){
-	uint n = 7;
+	uint n = 3;
 	matrix m(n, n);
 	for(uint i = 0; i < n; ++i){
 		for(uint j = 0; j < n; ++j){
-			m[i][j] = (rand() % 10);
+			m[i][j] = 0; //(rand() % 10);
 		}
 	}
+/*
+	m[0][0] = 1;
+	m[0][1] = 2;
+	m[0][2] = 1;
+	m[1][0] = 1;
+	m[1][1] = 0;
+	m[1][2] = 2;
+	m[2][0] = -1;
+	m[2][1] = 3;
+	m[2][2] = 0;
+*/
+	try{
+	matrix cof = m.cofactor();
 	std::cout << m << '\n';
-
-
-	uint start = clock();
-	std::cout << m.det() << '\n';
-	std::cout << clock()-start <<'\n';
+	std::cout << cof << '\n';
+	std::cout << m * cof << '\n';
+	std::cout << cof * m << '\n';
+	std::cout << m.inverse() << '\n';
+	}catch(const char *e){
+		std::cout << e << '\n';
+	}
 }
 
 void matrix_mminor(){

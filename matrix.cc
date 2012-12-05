@@ -162,8 +162,11 @@ transpose() const{
 
 matrix matrix::
 inverse() const{
-	// TODO
-	throw "NOT IMPLEMENTED";
+	float d = this->det();
+	if(d == 0)
+		throw "do not have an inverse matrix";
+
+	return (1.0/d) * this->cofactor();
 }
 
 matrix matrix::
@@ -249,6 +252,21 @@ det() const{	//TODO there should be some optimizing methods
 			result -= mminor_det;
 		else
 			result += mminor_det;
+	}
+	return result;
+}
+
+matrix matrix::
+cofactor() const{
+	matrix result(this->row_count(), this->col_count());
+
+	for(uint i = 0; i < this->row_count(); ++i){
+		for(uint j = 0; j < this->col_count(); ++j){
+			if((i+j) % 2)
+				result[i][j] = - this->mminor(j,i).det();
+			else
+				result[i][j] = this->mminor(j,i).det();
+		}
 	}
 	return result;
 }

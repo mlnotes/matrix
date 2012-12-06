@@ -164,7 +164,7 @@ matrix matrix::
 inverse() const{
 	float d = this->det();
 	if(d == 0)
-		throw "do not have an inverse matrix";
+		throw "do not have an inverse matrix: determinant is 0";
 
 	return (1.0/d) * this->cofactor();
 }
@@ -224,6 +224,7 @@ mminor(uint rstart, uint rend, uint cstart, uint cend, matrix &sub) const{
 	return result;
 }
 
+// using Laplace expansion to calculat
 float matrix::
 det() const{	//TODO there should be some optimizing methods
 	if(this->row_count() != this->col_count())
@@ -252,6 +253,47 @@ det() const{	//TODO there should be some optimizing methods
 			result -= mminor_det;
 		else
 			result += mminor_det;
+	}
+	return result;
+}
+
+// using the defination of determinant to calculate
+float matrix::
+fast_det() const{
+	if(this->row_count() != this->col_count())
+		throw "Only n*n matrix has determinant";
+
+	uint n = this->row_count();
+	uint *range = new uint[n];
+	for(uint i = 0; i < n; ++i)
+		range[i] = i;
+
+	float result = det_help(range, n, 0, 1);
+	delete [] range;
+	return result;
+}
+
+float matrix::
+det_help(uint *range, uint size, uint cur, int sgn) const{
+	if(cur == size){
+		float result = 1;
+		for(uint i = 0; i < size; ++i){
+			result *= this->_data[i][range[i]];
+		}
+		return (sgn==1)?result:-result;
+	}
+
+	float result = det_help(range, size, cur+1, sgn);
+	for(uint i = cur+1; i < size; ++i){
+		int t = range[i];
+		range[i] = range[cur];
+		range[cur] = t;
+		
+		result += det_help(range, size, cur+1, -sgn);
+		
+		t = range[i];
+		range[i] = range[cur];
+		range[cur] = t;
 	}
 	return result;
 }

@@ -28,6 +28,7 @@ public:
 	matrix transpose() const;
 	matrix inverse() const;
 	float det() const;
+	float fast_det() const;
 	matrix cofactor() const;
 private:
 	uint _rows;
@@ -35,5 +36,6 @@ private:
 	mvector *_data;
 
 	void copy(const matrix &);
+	float det_help(uint *, uint, uint, int) const;
 };
 #endif
